@@ -1,0 +1,1664 @@
+
+7-Segment Counter.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         0000092c  00000000  00000000  00000074  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  000009a0  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000014  00800060  00800060  000009a0  2**0
+                  ALLOC
+  3 .comment      00000030  00000000  00000000  000009a0  2**0
+                  CONTENTS, READONLY
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000009d0  2**2
+                  CONTENTS, READONLY
+  5 .debug_aranges 000000f0  00000000  00000000  00000a0c  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  6 .debug_info   00001314  00000000  00000000  00000afc  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  7 .debug_abbrev 00000894  00000000  00000000  00001e10  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  8 .debug_line   00000a36  00000000  00000000  000026a4  2**0
+                  CONTENTS, READONLY, DEBUGGING
+  9 .debug_frame  0000046c  00000000  00000000  000030dc  2**2
+                  CONTENTS, READONLY, DEBUGGING
+ 10 .debug_str    0000082d  00000000  00000000  00003548  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 11 .debug_loc    00000b55  00000000  00000000  00003d75  2**0
+                  CONTENTS, READONLY, DEBUGGING
+ 12 .debug_ranges 000000c0  00000000  00000000  000048ca  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	0c 94 2a 00 	jmp	0x54	; 0x54 <__ctors_end>
+   4:	0c 94 88 01 	jmp	0x310	; 0x310 <__vector_1>
+   8:	0c 94 b1 01 	jmp	0x362	; 0x362 <__vector_2>
+   c:	0c 94 46 03 	jmp	0x68c	; 0x68c <__vector_3>
+  10:	0c 94 1d 03 	jmp	0x63a	; 0x63a <__vector_4>
+  14:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  18:	0c 94 cb 02 	jmp	0x596	; 0x596 <__vector_6>
+  1c:	0c 94 f4 02 	jmp	0x5e8	; 0x5e8 <__vector_7>
+  20:	0c 94 9a 02 	jmp	0x534	; 0x534 <__vector_8>
+  24:	0c 94 48 02 	jmp	0x490	; 0x490 <__vector_9>
+  28:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  2c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  30:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  34:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  38:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  3c:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  40:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  44:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+  48:	0c 94 da 01 	jmp	0x3b4	; 0x3b4 <__vector_18>
+  4c:	0c 94 71 02 	jmp	0x4e2	; 0x4e2 <__vector_19>
+  50:	0c 94 3c 00 	jmp	0x78	; 0x78 <__bad_interrupt>
+
+00000054 <__ctors_end>:
+  54:	11 24       	eor	r1, r1
+  56:	1f be       	out	0x3f, r1	; 63
+  58:	cf e5       	ldi	r28, 0x5F	; 95
+  5a:	d4 e0       	ldi	r29, 0x04	; 4
+  5c:	de bf       	out	0x3e, r29	; 62
+  5e:	cd bf       	out	0x3d, r28	; 61
+
+00000060 <__do_clear_bss>:
+  60:	20 e0       	ldi	r18, 0x00	; 0
+  62:	a0 e6       	ldi	r26, 0x60	; 96
+  64:	b0 e0       	ldi	r27, 0x00	; 0
+  66:	01 c0       	rjmp	.+2      	; 0x6a <.do_clear_bss_start>
+
+00000068 <.do_clear_bss_loop>:
+  68:	1d 92       	st	X+, r1
+
+0000006a <.do_clear_bss_start>:
+  6a:	a4 37       	cpi	r26, 0x74	; 116
+  6c:	b2 07       	cpc	r27, r18
+  6e:	e1 f7       	brne	.-8      	; 0x68 <.do_clear_bss_loop>
+  70:	0e 94 52 00 	call	0xa4	; 0xa4 <main>
+  74:	0c 94 94 04 	jmp	0x928	; 0x928 <_exit>
+
+00000078 <__bad_interrupt>:
+  78:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
+
+0000007c <INT_function>:
+
+/* External Interrupt Function */
+void INT_function(void)
+{
+	/* Reset Counter */
+	seconds_count = 0;
+  7c:	10 92 63 00 	sts	0x0063, r1	; 0x800063 <seconds_count>
+	minutes_count = 0;
+  80:	10 92 62 00 	sts	0x0062, r1	; 0x800062 <minutes_count>
+	hours_count = 0;
+  84:	10 92 61 00 	sts	0x0061, r1	; 0x800061 <hours_count>
+  88:	08 95       	ret
+
+0000008a <TIMER_function>:
+}
+
+/* Timer Function */
+void TIMER_function(void)
+{
+	g_tick++;
+  8a:	80 91 65 00 	lds	r24, 0x0065	; 0x800065 <g_tick>
+  8e:	8f 5f       	subi	r24, 0xFF	; 255
+  90:	80 93 65 00 	sts	0x0065, r24	; 0x800065 <g_tick>
+	if(g_tick == NUMBER_OF_COMPARE_MATCHES_PER_SECOND)
+  94:	84 30       	cpi	r24, 0x04	; 4
+  96:	29 f4       	brne	.+10     	; 0xa2 <TIMER_function+0x18>
+	{
+		count_second_flag = 1;
+  98:	81 e0       	ldi	r24, 0x01	; 1
+  9a:	80 93 64 00 	sts	0x0064, r24	; 0x800064 <count_second_flag>
+		g_tick = 0; //clear the tick counter again to count a new second
+  9e:	10 92 65 00 	sts	0x0065, r1	; 0x800065 <g_tick>
+  a2:	08 95       	ret
+
+000000a4 <main>:
+	}
+}
+
+void main(){
+  a4:	cf 93       	push	r28
+  a6:	df 93       	push	r29
+  a8:	cd b7       	in	r28, 0x3d	; 61
+  aa:	de b7       	in	r29, 0x3e	; 62
+  ac:	2c 97       	sbiw	r28, 0x0c	; 12
+  ae:	0f b6       	in	r0, 0x3f	; 63
+  b0:	f8 94       	cli
+  b2:	de bf       	out	0x3e, r29	; 62
+  b4:	0f be       	out	0x3f, r0	; 63
+  b6:	cd bf       	out	0x3d, r28	; 61
+
+	SET_BIT(SREG,7);	//Enable Global interrupt I-bit
+  b8:	8f b7       	in	r24, 0x3f	; 63
+  ba:	80 68       	ori	r24, 0x80	; 128
+  bc:	8f bf       	out	0x3f, r24	; 63
+
+	// Enable and configure external INT1
+	Interrupt_ConfigType  Interrupt_Config = {Interrupt1, FALLING_EDGE};
+  be:	19 82       	std	Y+1, r1	; 0x01
+  c0:	1a 82       	std	Y+2, r1	; 0x02
+  c2:	1b 82       	std	Y+3, r1	; 0x03
+  c4:	ff 24       	eor	r15, r15
+  c6:	f3 94       	inc	r15
+  c8:	f9 82       	std	Y+1, r15	; 0x01
+  ca:	68 94       	set
+  cc:	ee 24       	eor	r14, r14
+  ce:	e1 f8       	bld	r14, 1
+  d0:	ea 82       	std	Y+2, r14	; 0x02
+	Interrupt_setCallBack(Interrupt1,INT_function);
+  d2:	6e e3       	ldi	r22, 0x3E	; 62
+  d4:	70 e0       	ldi	r23, 0x00	; 0
+  d6:	81 e0       	ldi	r24, 0x01	; 1
+  d8:	0e 94 3f 02 	call	0x47e	; 0x47e <Interrupt_setCallBack>
+	Interrupt_init(&Interrupt_Config);
+  dc:	ce 01       	movw	r24, r28
+  de:	01 96       	adiw	r24, 0x01	; 1
+  e0:	0e 94 03 02 	call	0x406	; 0x406 <Interrupt_init>
+
+	// Enable and configure Timer0
+	Timer_ConfigType  Timer_Config = {TIMER0, CTC, DISCONNECTED, F_CPU_1024, ON,244};
+  e4:	8e 01       	movw	r16, r28
+  e6:	0c 5f       	subi	r16, 0xFC	; 252
+  e8:	1f 4f       	sbci	r17, 0xFF	; 255
+  ea:	89 e0       	ldi	r24, 0x09	; 9
+  ec:	d8 01       	movw	r26, r16
+  ee:	1d 92       	st	X+, r1
+  f0:	8a 95       	dec	r24
+  f2:	e9 f7       	brne	.-6      	; 0xee <main+0x4a>
+  f4:	ed 82       	std	Y+5, r14	; 0x05
+  f6:	85 e0       	ldi	r24, 0x05	; 5
+  f8:	8f 83       	std	Y+7, r24	; 0x07
+  fa:	f8 86       	std	Y+8, r15	; 0x08
+  fc:	84 ef       	ldi	r24, 0xF4	; 244
+  fe:	90 e0       	ldi	r25, 0x00	; 0
+ 100:	9a 87       	std	Y+10, r25	; 0x0a
+ 102:	89 87       	std	Y+9, r24	; 0x09
+	Timer_setCallBack(TIMER0,TIMER_function);
+ 104:	65 e4       	ldi	r22, 0x45	; 69
+ 106:	70 e0       	ldi	r23, 0x00	; 0
+ 108:	80 e0       	ldi	r24, 0x00	; 0
+ 10a:	0e 94 8b 04 	call	0x916	; 0x916 <Timer_setCallBack>
+	Timer_init(&Timer_Config);
+ 10e:	c8 01       	movw	r24, r16
+ 110:	0e 94 6f 03 	call	0x6de	; 0x6de <Timer_init>
+
+	// enable internal pull up resistor at INT0/PD2 pin
+	SET_BIT(PORTD,PD2);
+ 114:	92 9a       	sbi	0x12, 2	; 18
+
+	// configure first four pins in CONTROL_PORT_PORT as output pins
+	DATA_PORT_DIR |= 0x0F;
+ 116:	8a b3       	in	r24, 0x1a	; 26
+ 118:	8f 60       	ori	r24, 0x0F	; 15
+ 11a:	8a bb       	out	0x1a, r24	; 26
+
+	// configure All pins of DATA_PORT_PORT as output pins
+	CONTROL_PORT_DIR = 0xFF;
+ 11c:	9f ef       	ldi	r25, 0xFF	; 255
+ 11e:	94 bb       	out	0x14, r25	; 20
+
+	// initialize all the 7-segment with zero value
+	DATA_PORT_PORT &= 0xF0;
+ 120:	8b b3       	in	r24, 0x1b	; 27
+ 122:	80 7f       	andi	r24, 0xF0	; 240
+ 124:	8b bb       	out	0x1b, r24	; 27
+	CONTROL_PORT_PORT |= 0xFF;
+ 126:	85 b3       	in	r24, 0x15	; 21
+ 128:	95 bb       	out	0x15, r25	; 21
+			count_second_flag = 0;
+		}
+		else
+		{
+			// out the number of seconds
+			CONTROL_PORT_PORT = (CONTROL_PORT_PORT & 0x00) | 0x01;
+ 12a:	01 e0       	ldi	r16, 0x01	; 1
+			DATA_PORT_PORT = (DATA_PORT_PORT & 0xF0) | (seconds_count%10);
+ 12c:	8d ec       	ldi	r24, 0xCD	; 205
+
+			// make small delay to see the changes in the 7-segment
+			// 2Miliseconds delay will not effect the seconds count
+			_delay_ms(2);
+
+			CONTROL_PORT_PORT = (CONTROL_PORT_PORT & 0x00) | 0x02;
+ 12e:	f2 e0       	ldi	r31, 0x02	; 2
+			DATA_PORT_PORT = (DATA_PORT_PORT & 0xF0) | (seconds_count/10);
+
+			_delay_ms(2);
+
+			// out the number of minutes
+			CONTROL_PORT_PORT = (CONTROL_PORT_PORT & 0x00) | 0x04;
+ 130:	e4 e0       	ldi	r30, 0x04	; 4
+			DATA_PORT_PORT = (DATA_PORT_PORT & 0xF0) | (minutes_count%10);
+
+			_delay_ms(2);
+
+			CONTROL_PORT_PORT = (CONTROL_PORT_PORT & 0x00) | 0x08;
+ 132:	78 e0       	ldi	r23, 0x08	; 8
+			DATA_PORT_PORT = (DATA_PORT_PORT & 0xF0) | (minutes_count/10);
+
+			_delay_ms(2);
+
+			// out the number of hours
+			CONTROL_PORT_PORT = (CONTROL_PORT_PORT & 0x00) | 0x10;
+ 134:	60 e1       	ldi	r22, 0x10	; 16
+			DATA_PORT_PORT = (DATA_PORT_PORT & 0xF0) | (hours_count%10);
+
+			_delay_ms(2);
+
+			CONTROL_PORT_PORT = (CONTROL_PORT_PORT & 0x00) | 0x20;
+ 136:	50 e2       	ldi	r21, 0x20	; 32
+			DATA_PORT_PORT = (DATA_PORT_PORT & 0xF0) | (hours_count/10);
+
+			_delay_ms(2);
+
+			// out the number of days
+			CONTROL_PORT_PORT = (CONTROL_PORT_PORT & 0x00) | 0x40;
+ 138:	40 e4       	ldi	r20, 0x40	; 64
+			DATA_PORT_PORT = (DATA_PORT_PORT & 0xF0) | (days_count%10);
+
+			_delay_ms(2);
+
+			CONTROL_PORT_PORT = (CONTROL_PORT_PORT & 0x00) | 0x80;
+ 13a:	30 e8       	ldi	r19, 0x80	; 128
+	// initialize all the 7-segment with zero value
+	DATA_PORT_PORT &= 0xF0;
+	CONTROL_PORT_PORT |= 0xFF;
+	while(TRUE)
+	{
+		if(count_second_flag == 1)
+ 13c:	90 91 64 00 	lds	r25, 0x0064	; 0x800064 <count_second_flag>
+ 140:	91 30       	cpi	r25, 0x01	; 1
+ 142:	49 f5       	brne	.+82     	; 0x196 <main+0xf2>
+		{
+			//enter here every one second
+			//increment seconds count
+			seconds_count++;
+ 144:	90 91 63 00 	lds	r25, 0x0063	; 0x800063 <seconds_count>
+ 148:	9f 5f       	subi	r25, 0xFF	; 255
+
+			if(seconds_count == 60)
+ 14a:	9c 33       	cpi	r25, 0x3C	; 60
+ 14c:	19 f0       	breq	.+6      	; 0x154 <main+0xb0>
+	{
+		if(count_second_flag == 1)
+		{
+			//enter here every one second
+			//increment seconds count
+			seconds_count++;
+ 14e:	90 93 63 00 	sts	0x0063, r25	; 0x800063 <seconds_count>
+ 152:	07 c0       	rjmp	.+14     	; 0x162 <main+0xbe>
+
+			if(seconds_count == 60)
+			{
+				seconds_count = 0;
+ 154:	10 92 63 00 	sts	0x0063, r1	; 0x800063 <seconds_count>
+				minutes_count++;
+ 158:	90 91 62 00 	lds	r25, 0x0062	; 0x800062 <minutes_count>
+ 15c:	9f 5f       	subi	r25, 0xFF	; 255
+ 15e:	90 93 62 00 	sts	0x0062, r25	; 0x800062 <minutes_count>
+			}
+			if(minutes_count == 60)
+ 162:	90 91 62 00 	lds	r25, 0x0062	; 0x800062 <minutes_count>
+ 166:	9c 33       	cpi	r25, 0x3C	; 60
+ 168:	39 f4       	brne	.+14     	; 0x178 <main+0xd4>
+			{
+				minutes_count = 0;
+ 16a:	10 92 62 00 	sts	0x0062, r1	; 0x800062 <minutes_count>
+				hours_count++;
+ 16e:	90 91 61 00 	lds	r25, 0x0061	; 0x800061 <hours_count>
+ 172:	9f 5f       	subi	r25, 0xFF	; 255
+ 174:	90 93 61 00 	sts	0x0061, r25	; 0x800061 <hours_count>
+			}
+			if(hours_count == 24)
+ 178:	90 91 61 00 	lds	r25, 0x0061	; 0x800061 <hours_count>
+ 17c:	98 31       	cpi	r25, 0x18	; 24
+ 17e:	11 f4       	brne	.+4      	; 0x184 <main+0xe0>
+			{
+				hours_count = 0;
+ 180:	10 92 61 00 	sts	0x0061, r1	; 0x800061 <hours_count>
+			}
+			if(days_count == 30)
+ 184:	90 91 60 00 	lds	r25, 0x0060	; 0x800060 <_edata>
+ 188:	9e 31       	cpi	r25, 0x1E	; 30
+ 18a:	11 f4       	brne	.+4      	; 0x190 <main+0xec>
+			{
+				days_count = 0;
+ 18c:	10 92 60 00 	sts	0x0060, r1	; 0x800060 <_edata>
+			}
+			// reset the flag again
+			count_second_flag = 0;
+ 190:	10 92 64 00 	sts	0x0064, r1	; 0x800064 <count_second_flag>
+ 194:	d3 cf       	rjmp	.-90     	; 0x13c <main+0x98>
+		}
+		else
+		{
+			// out the number of seconds
+			CONTROL_PORT_PORT = (CONTROL_PORT_PORT & 0x00) | 0x01;
+ 196:	95 b3       	in	r25, 0x15	; 21
+ 198:	05 bb       	out	0x15, r16	; 21
+			DATA_PORT_PORT = (DATA_PORT_PORT & 0xF0) | (seconds_count%10);
+ 19a:	2b b3       	in	r18, 0x1b	; 27
+ 19c:	b0 91 63 00 	lds	r27, 0x0063	; 0x800063 <seconds_count>
+ 1a0:	b8 9f       	mul	r27, r24
+ 1a2:	91 2d       	mov	r25, r1
+ 1a4:	11 24       	eor	r1, r1
+ 1a6:	96 95       	lsr	r25
+ 1a8:	96 95       	lsr	r25
+ 1aa:	96 95       	lsr	r25
+ 1ac:	99 0f       	add	r25, r25
+ 1ae:	19 2f       	mov	r17, r25
+ 1b0:	11 0f       	add	r17, r17
+ 1b2:	11 0f       	add	r17, r17
+ 1b4:	91 0f       	add	r25, r17
+ 1b6:	b9 1b       	sub	r27, r25
+ 1b8:	92 2f       	mov	r25, r18
+ 1ba:	90 7f       	andi	r25, 0xF0	; 240
+ 1bc:	9b 2b       	or	r25, r27
+ 1be:	9b bb       	out	0x1b, r25	; 27
+	#else
+		//round up by default
+		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+	#endif
+
+	__builtin_avr_delay_cycles(__ticks_dc);
+ 1c0:	a3 ef       	ldi	r26, 0xF3	; 243
+ 1c2:	b1 e0       	ldi	r27, 0x01	; 1
+ 1c4:	11 97       	sbiw	r26, 0x01	; 1
+ 1c6:	f1 f7       	brne	.-4      	; 0x1c4 <main+0x120>
+ 1c8:	00 c0       	rjmp	.+0      	; 0x1ca <main+0x126>
+ 1ca:	00 00       	nop
+
+			// make small delay to see the changes in the 7-segment
+			// 2Miliseconds delay will not effect the seconds count
+			_delay_ms(2);
+
+			CONTROL_PORT_PORT = (CONTROL_PORT_PORT & 0x00) | 0x02;
+ 1cc:	95 b3       	in	r25, 0x15	; 21
+ 1ce:	f5 bb       	out	0x15, r31	; 21
+			DATA_PORT_PORT = (DATA_PORT_PORT & 0xF0) | (seconds_count/10);
+ 1d0:	9b b3       	in	r25, 0x1b	; 27
+ 1d2:	20 91 63 00 	lds	r18, 0x0063	; 0x800063 <seconds_count>
+ 1d6:	28 9f       	mul	r18, r24
+ 1d8:	21 2d       	mov	r18, r1
+ 1da:	11 24       	eor	r1, r1
+ 1dc:	26 95       	lsr	r18
+ 1de:	26 95       	lsr	r18
+ 1e0:	26 95       	lsr	r18
+ 1e2:	90 7f       	andi	r25, 0xF0	; 240
+ 1e4:	92 2b       	or	r25, r18
+ 1e6:	9b bb       	out	0x1b, r25	; 27
+ 1e8:	a3 ef       	ldi	r26, 0xF3	; 243
+ 1ea:	b1 e0       	ldi	r27, 0x01	; 1
+ 1ec:	11 97       	sbiw	r26, 0x01	; 1
+ 1ee:	f1 f7       	brne	.-4      	; 0x1ec <main+0x148>
+ 1f0:	00 c0       	rjmp	.+0      	; 0x1f2 <main+0x14e>
+ 1f2:	00 00       	nop
+
+			_delay_ms(2);
+
+			// out the number of minutes
+			CONTROL_PORT_PORT = (CONTROL_PORT_PORT & 0x00) | 0x04;
+ 1f4:	95 b3       	in	r25, 0x15	; 21
+ 1f6:	e5 bb       	out	0x15, r30	; 21
+			DATA_PORT_PORT = (DATA_PORT_PORT & 0xF0) | (minutes_count%10);
+ 1f8:	2b b3       	in	r18, 0x1b	; 27
+ 1fa:	b0 91 62 00 	lds	r27, 0x0062	; 0x800062 <minutes_count>
+ 1fe:	b8 9f       	mul	r27, r24
+ 200:	91 2d       	mov	r25, r1
+ 202:	11 24       	eor	r1, r1
+ 204:	96 95       	lsr	r25
+ 206:	96 95       	lsr	r25
+ 208:	96 95       	lsr	r25
+ 20a:	99 0f       	add	r25, r25
+ 20c:	19 2f       	mov	r17, r25
+ 20e:	11 0f       	add	r17, r17
+ 210:	11 0f       	add	r17, r17
+ 212:	91 0f       	add	r25, r17
+ 214:	b9 1b       	sub	r27, r25
+ 216:	92 2f       	mov	r25, r18
+ 218:	90 7f       	andi	r25, 0xF0	; 240
+ 21a:	9b 2b       	or	r25, r27
+ 21c:	9b bb       	out	0x1b, r25	; 27
+ 21e:	a3 ef       	ldi	r26, 0xF3	; 243
+ 220:	b1 e0       	ldi	r27, 0x01	; 1
+ 222:	11 97       	sbiw	r26, 0x01	; 1
+ 224:	f1 f7       	brne	.-4      	; 0x222 <main+0x17e>
+ 226:	00 c0       	rjmp	.+0      	; 0x228 <main+0x184>
+ 228:	00 00       	nop
+
+			_delay_ms(2);
+
+			CONTROL_PORT_PORT = (CONTROL_PORT_PORT & 0x00) | 0x08;
+ 22a:	95 b3       	in	r25, 0x15	; 21
+ 22c:	75 bb       	out	0x15, r23	; 21
+			DATA_PORT_PORT = (DATA_PORT_PORT & 0xF0) | (minutes_count/10);
+ 22e:	9b b3       	in	r25, 0x1b	; 27
+ 230:	20 91 62 00 	lds	r18, 0x0062	; 0x800062 <minutes_count>
+ 234:	28 9f       	mul	r18, r24
+ 236:	21 2d       	mov	r18, r1
+ 238:	11 24       	eor	r1, r1
+ 23a:	26 95       	lsr	r18
+ 23c:	26 95       	lsr	r18
+ 23e:	26 95       	lsr	r18
+ 240:	90 7f       	andi	r25, 0xF0	; 240
+ 242:	92 2b       	or	r25, r18
+ 244:	9b bb       	out	0x1b, r25	; 27
+ 246:	a3 ef       	ldi	r26, 0xF3	; 243
+ 248:	b1 e0       	ldi	r27, 0x01	; 1
+ 24a:	11 97       	sbiw	r26, 0x01	; 1
+ 24c:	f1 f7       	brne	.-4      	; 0x24a <main+0x1a6>
+ 24e:	00 c0       	rjmp	.+0      	; 0x250 <main+0x1ac>
+ 250:	00 00       	nop
+
+			_delay_ms(2);
+
+			// out the number of hours
+			CONTROL_PORT_PORT = (CONTROL_PORT_PORT & 0x00) | 0x10;
+ 252:	95 b3       	in	r25, 0x15	; 21
+ 254:	65 bb       	out	0x15, r22	; 21
+			DATA_PORT_PORT = (DATA_PORT_PORT & 0xF0) | (hours_count%10);
+ 256:	2b b3       	in	r18, 0x1b	; 27
+ 258:	b0 91 61 00 	lds	r27, 0x0061	; 0x800061 <hours_count>
+ 25c:	b8 9f       	mul	r27, r24
+ 25e:	91 2d       	mov	r25, r1
+ 260:	11 24       	eor	r1, r1
+ 262:	96 95       	lsr	r25
+ 264:	96 95       	lsr	r25
+ 266:	96 95       	lsr	r25
+ 268:	99 0f       	add	r25, r25
+ 26a:	19 2f       	mov	r17, r25
+ 26c:	11 0f       	add	r17, r17
+ 26e:	11 0f       	add	r17, r17
+ 270:	91 0f       	add	r25, r17
+ 272:	b9 1b       	sub	r27, r25
+ 274:	92 2f       	mov	r25, r18
+ 276:	90 7f       	andi	r25, 0xF0	; 240
+ 278:	9b 2b       	or	r25, r27
+ 27a:	9b bb       	out	0x1b, r25	; 27
+ 27c:	a3 ef       	ldi	r26, 0xF3	; 243
+ 27e:	b1 e0       	ldi	r27, 0x01	; 1
+ 280:	11 97       	sbiw	r26, 0x01	; 1
+ 282:	f1 f7       	brne	.-4      	; 0x280 <main+0x1dc>
+ 284:	00 c0       	rjmp	.+0      	; 0x286 <main+0x1e2>
+ 286:	00 00       	nop
+
+			_delay_ms(2);
+
+			CONTROL_PORT_PORT = (CONTROL_PORT_PORT & 0x00) | 0x20;
+ 288:	95 b3       	in	r25, 0x15	; 21
+ 28a:	55 bb       	out	0x15, r21	; 21
+			DATA_PORT_PORT = (DATA_PORT_PORT & 0xF0) | (hours_count/10);
+ 28c:	9b b3       	in	r25, 0x1b	; 27
+ 28e:	20 91 61 00 	lds	r18, 0x0061	; 0x800061 <hours_count>
+ 292:	28 9f       	mul	r18, r24
+ 294:	21 2d       	mov	r18, r1
+ 296:	11 24       	eor	r1, r1
+ 298:	26 95       	lsr	r18
+ 29a:	26 95       	lsr	r18
+ 29c:	26 95       	lsr	r18
+ 29e:	90 7f       	andi	r25, 0xF0	; 240
+ 2a0:	92 2b       	or	r25, r18
+ 2a2:	9b bb       	out	0x1b, r25	; 27
+ 2a4:	a3 ef       	ldi	r26, 0xF3	; 243
+ 2a6:	b1 e0       	ldi	r27, 0x01	; 1
+ 2a8:	11 97       	sbiw	r26, 0x01	; 1
+ 2aa:	f1 f7       	brne	.-4      	; 0x2a8 <main+0x204>
+ 2ac:	00 c0       	rjmp	.+0      	; 0x2ae <main+0x20a>
+ 2ae:	00 00       	nop
+
+			_delay_ms(2);
+
+			// out the number of days
+			CONTROL_PORT_PORT = (CONTROL_PORT_PORT & 0x00) | 0x40;
+ 2b0:	95 b3       	in	r25, 0x15	; 21
+ 2b2:	45 bb       	out	0x15, r20	; 21
+			DATA_PORT_PORT = (DATA_PORT_PORT & 0xF0) | (days_count%10);
+ 2b4:	2b b3       	in	r18, 0x1b	; 27
+ 2b6:	b0 91 60 00 	lds	r27, 0x0060	; 0x800060 <_edata>
+ 2ba:	b8 9f       	mul	r27, r24
+ 2bc:	91 2d       	mov	r25, r1
+ 2be:	11 24       	eor	r1, r1
+ 2c0:	96 95       	lsr	r25
+ 2c2:	96 95       	lsr	r25
+ 2c4:	96 95       	lsr	r25
+ 2c6:	99 0f       	add	r25, r25
+ 2c8:	19 2f       	mov	r17, r25
+ 2ca:	11 0f       	add	r17, r17
+ 2cc:	11 0f       	add	r17, r17
+ 2ce:	91 0f       	add	r25, r17
+ 2d0:	b9 1b       	sub	r27, r25
+ 2d2:	92 2f       	mov	r25, r18
+ 2d4:	90 7f       	andi	r25, 0xF0	; 240
+ 2d6:	9b 2b       	or	r25, r27
+ 2d8:	9b bb       	out	0x1b, r25	; 27
+ 2da:	a3 ef       	ldi	r26, 0xF3	; 243
+ 2dc:	b1 e0       	ldi	r27, 0x01	; 1
+ 2de:	11 97       	sbiw	r26, 0x01	; 1
+ 2e0:	f1 f7       	brne	.-4      	; 0x2de <main+0x23a>
+ 2e2:	00 c0       	rjmp	.+0      	; 0x2e4 <main+0x240>
+ 2e4:	00 00       	nop
+
+			_delay_ms(2);
+
+			CONTROL_PORT_PORT = (CONTROL_PORT_PORT & 0x00) | 0x80;
+ 2e6:	95 b3       	in	r25, 0x15	; 21
+ 2e8:	35 bb       	out	0x15, r19	; 21
+			DATA_PORT_PORT = (DATA_PORT_PORT & 0xF0) | (days_count/10);
+ 2ea:	9b b3       	in	r25, 0x1b	; 27
+ 2ec:	20 91 60 00 	lds	r18, 0x0060	; 0x800060 <_edata>
+ 2f0:	28 9f       	mul	r18, r24
+ 2f2:	21 2d       	mov	r18, r1
+ 2f4:	11 24       	eor	r1, r1
+ 2f6:	26 95       	lsr	r18
+ 2f8:	26 95       	lsr	r18
+ 2fa:	26 95       	lsr	r18
+ 2fc:	90 7f       	andi	r25, 0xF0	; 240
+ 2fe:	92 2b       	or	r25, r18
+ 300:	9b bb       	out	0x1b, r25	; 27
+ 302:	a3 ef       	ldi	r26, 0xF3	; 243
+ 304:	b1 e0       	ldi	r27, 0x01	; 1
+ 306:	11 97       	sbiw	r26, 0x01	; 1
+ 308:	f1 f7       	brne	.-4      	; 0x306 <main+0x262>
+ 30a:	00 c0       	rjmp	.+0      	; 0x30c <main+0x268>
+ 30c:	00 00       	nop
+ 30e:	16 cf       	rjmp	.-468    	; 0x13c <main+0x98>
+
+00000310 <__vector_1>:
+
+/*******************************************************************************
+ *                       Interrupt Service Routines                            *
+ *******************************************************************************/
+ISR(INT0_vect)
+{
+ 310:	1f 92       	push	r1
+ 312:	0f 92       	push	r0
+ 314:	0f b6       	in	r0, 0x3f	; 63
+ 316:	0f 92       	push	r0
+ 318:	11 24       	eor	r1, r1
+ 31a:	2f 93       	push	r18
+ 31c:	3f 93       	push	r19
+ 31e:	4f 93       	push	r20
+ 320:	5f 93       	push	r21
+ 322:	6f 93       	push	r22
+ 324:	7f 93       	push	r23
+ 326:	8f 93       	push	r24
+ 328:	9f 93       	push	r25
+ 32a:	af 93       	push	r26
+ 32c:	bf 93       	push	r27
+ 32e:	ef 93       	push	r30
+ 330:	ff 93       	push	r31
+	/*check if function is passed to the pointer*/
+	if(g_callBackPtr[0] != NULL_PTR)
+ 332:	e0 91 66 00 	lds	r30, 0x0066	; 0x800066 <g_callBackPtr>
+ 336:	f0 91 67 00 	lds	r31, 0x0067	; 0x800067 <g_callBackPtr+0x1>
+ 33a:	30 97       	sbiw	r30, 0x00	; 0
+ 33c:	09 f0       	breq	.+2      	; 0x340 <__vector_1+0x30>
+	{
+		/* Call the Call Back function in the application */
+		(*g_callBackPtr[0])();
+ 33e:	09 95       	icall
+		/* another method to call the function using pointer to function g_callBackPtr(); */
+	}
+}
+ 340:	ff 91       	pop	r31
+ 342:	ef 91       	pop	r30
+ 344:	bf 91       	pop	r27
+ 346:	af 91       	pop	r26
+ 348:	9f 91       	pop	r25
+ 34a:	8f 91       	pop	r24
+ 34c:	7f 91       	pop	r23
+ 34e:	6f 91       	pop	r22
+ 350:	5f 91       	pop	r21
+ 352:	4f 91       	pop	r20
+ 354:	3f 91       	pop	r19
+ 356:	2f 91       	pop	r18
+ 358:	0f 90       	pop	r0
+ 35a:	0f be       	out	0x3f, r0	; 63
+ 35c:	0f 90       	pop	r0
+ 35e:	1f 90       	pop	r1
+ 360:	18 95       	reti
+
+00000362 <__vector_2>:
+
+ISR(INT1_vect)
+{
+ 362:	1f 92       	push	r1
+ 364:	0f 92       	push	r0
+ 366:	0f b6       	in	r0, 0x3f	; 63
+ 368:	0f 92       	push	r0
+ 36a:	11 24       	eor	r1, r1
+ 36c:	2f 93       	push	r18
+ 36e:	3f 93       	push	r19
+ 370:	4f 93       	push	r20
+ 372:	5f 93       	push	r21
+ 374:	6f 93       	push	r22
+ 376:	7f 93       	push	r23
+ 378:	8f 93       	push	r24
+ 37a:	9f 93       	push	r25
+ 37c:	af 93       	push	r26
+ 37e:	bf 93       	push	r27
+ 380:	ef 93       	push	r30
+ 382:	ff 93       	push	r31
+	/*check if function is passed to the pointer*/
+	if(g_callBackPtr[1] != NULL_PTR)
+ 384:	e0 91 68 00 	lds	r30, 0x0068	; 0x800068 <g_callBackPtr+0x2>
+ 388:	f0 91 69 00 	lds	r31, 0x0069	; 0x800069 <g_callBackPtr+0x3>
+ 38c:	30 97       	sbiw	r30, 0x00	; 0
+ 38e:	09 f0       	breq	.+2      	; 0x392 <__vector_2+0x30>
+	{
+		/* Call the Call Back function in the application */
+		(*g_callBackPtr[1])();
+ 390:	09 95       	icall
+		/* another method to call the function using pointer to function g_callBackPtr(); */
+	}
+}
+ 392:	ff 91       	pop	r31
+ 394:	ef 91       	pop	r30
+ 396:	bf 91       	pop	r27
+ 398:	af 91       	pop	r26
+ 39a:	9f 91       	pop	r25
+ 39c:	8f 91       	pop	r24
+ 39e:	7f 91       	pop	r23
+ 3a0:	6f 91       	pop	r22
+ 3a2:	5f 91       	pop	r21
+ 3a4:	4f 91       	pop	r20
+ 3a6:	3f 91       	pop	r19
+ 3a8:	2f 91       	pop	r18
+ 3aa:	0f 90       	pop	r0
+ 3ac:	0f be       	out	0x3f, r0	; 63
+ 3ae:	0f 90       	pop	r0
+ 3b0:	1f 90       	pop	r1
+ 3b2:	18 95       	reti
+
+000003b4 <__vector_18>:
+
+ISR(INT2_vect)
+{
+ 3b4:	1f 92       	push	r1
+ 3b6:	0f 92       	push	r0
+ 3b8:	0f b6       	in	r0, 0x3f	; 63
+ 3ba:	0f 92       	push	r0
+ 3bc:	11 24       	eor	r1, r1
+ 3be:	2f 93       	push	r18
+ 3c0:	3f 93       	push	r19
+ 3c2:	4f 93       	push	r20
+ 3c4:	5f 93       	push	r21
+ 3c6:	6f 93       	push	r22
+ 3c8:	7f 93       	push	r23
+ 3ca:	8f 93       	push	r24
+ 3cc:	9f 93       	push	r25
+ 3ce:	af 93       	push	r26
+ 3d0:	bf 93       	push	r27
+ 3d2:	ef 93       	push	r30
+ 3d4:	ff 93       	push	r31
+	/*check if function is passed to the pointer*/
+	if(g_callBackPtr[2] != NULL_PTR)
+ 3d6:	e0 91 6a 00 	lds	r30, 0x006A	; 0x80006a <g_callBackPtr+0x4>
+ 3da:	f0 91 6b 00 	lds	r31, 0x006B	; 0x80006b <g_callBackPtr+0x5>
+ 3de:	30 97       	sbiw	r30, 0x00	; 0
+ 3e0:	09 f0       	breq	.+2      	; 0x3e4 <__vector_18+0x30>
+	{
+		/* Call the Call Back function in the application */
+		(*g_callBackPtr[2])();
+ 3e2:	09 95       	icall
+		/* another method to call the function using pointer to function g_callBackPtr(); */
+	}
+}
+ 3e4:	ff 91       	pop	r31
+ 3e6:	ef 91       	pop	r30
+ 3e8:	bf 91       	pop	r27
+ 3ea:	af 91       	pop	r26
+ 3ec:	9f 91       	pop	r25
+ 3ee:	8f 91       	pop	r24
+ 3f0:	7f 91       	pop	r23
+ 3f2:	6f 91       	pop	r22
+ 3f4:	5f 91       	pop	r21
+ 3f6:	4f 91       	pop	r20
+ 3f8:	3f 91       	pop	r19
+ 3fa:	2f 91       	pop	r18
+ 3fc:	0f 90       	pop	r0
+ 3fe:	0f be       	out	0x3f, r0	; 63
+ 400:	0f 90       	pop	r0
+ 402:	1f 90       	pop	r1
+ 404:	18 95       	reti
+
+00000406 <Interrupt_init>:
+ * 	2. Set the required Interrupt.
+ * 	3. Enable the Interrupt Interrupt.
+ * 	4. Initialize Interrupt Registers.
+ */
+void Interrupt_init(const Interrupt_ConfigType * Config_Ptr)
+{
+ 406:	fc 01       	movw	r30, r24
+	CLEAR_BIT(SREG,7);      // Disable interrupts by clearing I-bit
+ 408:	9f b7       	in	r25, 0x3f	; 63
+ 40a:	9f 77       	andi	r25, 0x7F	; 127
+ 40c:	9f bf       	out	0x3f, r25	; 63
+
+	switch(Config_Ptr->interrupt){
+ 40e:	90 81       	ld	r25, Z
+ 410:	91 30       	cpi	r25, 0x01	; 1
+ 412:	79 f0       	breq	.+30     	; 0x432 <Interrupt_init+0x2c>
+ 414:	18 f0       	brcs	.+6      	; 0x41c <Interrupt_init+0x16>
+ 416:	92 30       	cpi	r25, 0x02	; 2
+ 418:	c9 f0       	breq	.+50     	; 0x44c <Interrupt_init+0x46>
+ 41a:	2d c0       	rjmp	.+90     	; 0x476 <__stack+0x17>
+		case Interrupt0:
+			CLEAR_BIT(DDRD,PD2);               // Configure INT0/PD2 as input pin
+ 41c:	8a 98       	cbi	0x11, 2	; 17
+			SET_BIT(GICR,INT0);                 // Enable external interrupt pin INT0
+ 41e:	8b b7       	in	r24, 0x3b	; 59
+ 420:	80 64       	ori	r24, 0x40	; 64
+ 422:	8b bf       	out	0x3b, r24	; 59
+			// Trigger INT0 with the required mode
+			MCUCR = (MCUCR & 0xFC) | ((Config_Ptr->mode & 0x03));
+ 424:	85 b7       	in	r24, 0x35	; 53
+ 426:	91 81       	ldd	r25, Z+1	; 0x01
+ 428:	93 70       	andi	r25, 0x03	; 3
+ 42a:	8c 7f       	andi	r24, 0xFC	; 252
+ 42c:	89 2b       	or	r24, r25
+ 42e:	85 bf       	out	0x35, r24	; 53
+			break;
+ 430:	22 c0       	rjmp	.+68     	; 0x476 <__stack+0x17>
+		case Interrupt1:
+			CLEAR_BIT(DDRD,PD3);               // Configure INT1/PD3 as input pin
+ 432:	8b 98       	cbi	0x11, 3	; 17
+			SET_BIT(GICR,INT1);                 // Enable external interrupt pin INT1
+ 434:	8b b7       	in	r24, 0x3b	; 59
+ 436:	80 68       	ori	r24, 0x80	; 128
+ 438:	8b bf       	out	0x3b, r24	; 59
+			// Trigger INT1 with the required mode
+			MCUCR = (MCUCR & 0xF3) | ((Config_Ptr->mode & 0x03)<<ISC10);
+ 43a:	85 b7       	in	r24, 0x35	; 53
+ 43c:	91 81       	ldd	r25, Z+1	; 0x01
+ 43e:	93 70       	andi	r25, 0x03	; 3
+ 440:	99 0f       	add	r25, r25
+ 442:	99 0f       	add	r25, r25
+ 444:	83 7f       	andi	r24, 0xF3	; 243
+ 446:	89 2b       	or	r24, r25
+ 448:	85 bf       	out	0x35, r24	; 53
+			break;
+ 44a:	15 c0       	rjmp	.+42     	; 0x476 <__stack+0x17>
+		case Interrupt2:
+			CLEAR_BIT(DDRB,PB2);               // Configure INT2/PB2 as input pin
+ 44c:	ba 98       	cbi	0x17, 2	; 23
+			SET_BIT(GICR,INT2);                 // Enable external interrupt pin INT2
+ 44e:	8b b7       	in	r24, 0x3b	; 59
+ 450:	80 62       	ori	r24, 0x20	; 32
+ 452:	8b bf       	out	0x3b, r24	; 59
+			// Trigger INT2 with the required mode
+			MCUCSR = (MCUCSR & 0xBF) | ((Config_Ptr->INT2_mode & 0x01)<<ISC2);
+ 454:	84 b7       	in	r24, 0x34	; 52
+ 456:	92 81       	ldd	r25, Z+2	; 0x02
+ 458:	29 2f       	mov	r18, r25
+ 45a:	21 70       	andi	r18, 0x01	; 1
+ 45c:	30 e0       	ldi	r19, 0x00	; 0
+ 45e:	00 24       	eor	r0, r0
+ 460:	36 95       	lsr	r19
+ 462:	27 95       	ror	r18
+ 464:	07 94       	ror	r0
+ 466:	36 95       	lsr	r19
+ 468:	27 95       	ror	r18
+ 46a:	07 94       	ror	r0
+ 46c:	32 2f       	mov	r19, r18
+ 46e:	20 2d       	mov	r18, r0
+ 470:	8f 7b       	andi	r24, 0xBF	; 191
+ 472:	28 2b       	or	r18, r24
+ 474:	24 bf       	out	0x34, r18	; 52
+			break;
+	}
+
+	SET_BIT(SREG,7);       // Enable interrupts by setting I-bit
+ 476:	8f b7       	in	r24, 0x3f	; 63
+ 478:	80 68       	ori	r24, 0x80	; 128
+ 47a:	8f bf       	out	0x3f, r24	; 63
+ 47c:	08 95       	ret
+
+0000047e <Interrupt_setCallBack>:
+ * Description: Function to set the Call Back function address.
+ */
+void Interrupt_setCallBack(Interrupt_Select Interrupt, void(*a_ptr)(void))
+{
+	/* Save the address of the Call back function in a global variable */
+	g_callBackPtr[Interrupt] = a_ptr;
+ 47e:	e8 2f       	mov	r30, r24
+ 480:	f0 e0       	ldi	r31, 0x00	; 0
+ 482:	ee 0f       	add	r30, r30
+ 484:	ff 1f       	adc	r31, r31
+ 486:	ea 59       	subi	r30, 0x9A	; 154
+ 488:	ff 4f       	sbci	r31, 0xFF	; 255
+ 48a:	71 83       	std	Z+1, r23	; 0x01
+ 48c:	60 83       	st	Z, r22
+ 48e:	08 95       	ret
+
+00000490 <__vector_9>:
+
+/*******************************************************************************
+ *                       Interrupt Service Routines                            *
+ *******************************************************************************/
+ISR(TIMER0_OVF_vect)
+{
+ 490:	1f 92       	push	r1
+ 492:	0f 92       	push	r0
+ 494:	0f b6       	in	r0, 0x3f	; 63
+ 496:	0f 92       	push	r0
+ 498:	11 24       	eor	r1, r1
+ 49a:	2f 93       	push	r18
+ 49c:	3f 93       	push	r19
+ 49e:	4f 93       	push	r20
+ 4a0:	5f 93       	push	r21
+ 4a2:	6f 93       	push	r22
+ 4a4:	7f 93       	push	r23
+ 4a6:	8f 93       	push	r24
+ 4a8:	9f 93       	push	r25
+ 4aa:	af 93       	push	r26
+ 4ac:	bf 93       	push	r27
+ 4ae:	ef 93       	push	r30
+ 4b0:	ff 93       	push	r31
+	/*check if function is passed to the pointer*/
+	if(g_callBackPtr[0] != NULL_PTR)
+ 4b2:	e0 91 6c 00 	lds	r30, 0x006C	; 0x80006c <g_callBackPtr>
+ 4b6:	f0 91 6d 00 	lds	r31, 0x006D	; 0x80006d <g_callBackPtr+0x1>
+ 4ba:	30 97       	sbiw	r30, 0x00	; 0
+ 4bc:	09 f0       	breq	.+2      	; 0x4c0 <__vector_9+0x30>
+	{
+		/* Call the Call Back function in the application */
+		(*g_callBackPtr[0])();
+ 4be:	09 95       	icall
+		/* another method to call the function using pointer to function g_callBackPtr(); */
+	}
+}
+ 4c0:	ff 91       	pop	r31
+ 4c2:	ef 91       	pop	r30
+ 4c4:	bf 91       	pop	r27
+ 4c6:	af 91       	pop	r26
+ 4c8:	9f 91       	pop	r25
+ 4ca:	8f 91       	pop	r24
+ 4cc:	7f 91       	pop	r23
+ 4ce:	6f 91       	pop	r22
+ 4d0:	5f 91       	pop	r21
+ 4d2:	4f 91       	pop	r20
+ 4d4:	3f 91       	pop	r19
+ 4d6:	2f 91       	pop	r18
+ 4d8:	0f 90       	pop	r0
+ 4da:	0f be       	out	0x3f, r0	; 63
+ 4dc:	0f 90       	pop	r0
+ 4de:	1f 90       	pop	r1
+ 4e0:	18 95       	reti
+
+000004e2 <__vector_19>:
+
+ISR(TIMER0_COMP_vect)
+{
+ 4e2:	1f 92       	push	r1
+ 4e4:	0f 92       	push	r0
+ 4e6:	0f b6       	in	r0, 0x3f	; 63
+ 4e8:	0f 92       	push	r0
+ 4ea:	11 24       	eor	r1, r1
+ 4ec:	2f 93       	push	r18
+ 4ee:	3f 93       	push	r19
+ 4f0:	4f 93       	push	r20
+ 4f2:	5f 93       	push	r21
+ 4f4:	6f 93       	push	r22
+ 4f6:	7f 93       	push	r23
+ 4f8:	8f 93       	push	r24
+ 4fa:	9f 93       	push	r25
+ 4fc:	af 93       	push	r26
+ 4fe:	bf 93       	push	r27
+ 500:	ef 93       	push	r30
+ 502:	ff 93       	push	r31
+	/*check if function is passed to the pointer*/
+	if(g_callBackPtr[0] != NULL_PTR)
+ 504:	e0 91 6c 00 	lds	r30, 0x006C	; 0x80006c <g_callBackPtr>
+ 508:	f0 91 6d 00 	lds	r31, 0x006D	; 0x80006d <g_callBackPtr+0x1>
+ 50c:	30 97       	sbiw	r30, 0x00	; 0
+ 50e:	09 f0       	breq	.+2      	; 0x512 <__vector_19+0x30>
+	{
+		/* Call the Call Back function in the application */
+		(*g_callBackPtr[0])();
+ 510:	09 95       	icall
+		/* another method to call the function using pointer to function g_callBackPtr(); */
+	}
+}
+ 512:	ff 91       	pop	r31
+ 514:	ef 91       	pop	r30
+ 516:	bf 91       	pop	r27
+ 518:	af 91       	pop	r26
+ 51a:	9f 91       	pop	r25
+ 51c:	8f 91       	pop	r24
+ 51e:	7f 91       	pop	r23
+ 520:	6f 91       	pop	r22
+ 522:	5f 91       	pop	r21
+ 524:	4f 91       	pop	r20
+ 526:	3f 91       	pop	r19
+ 528:	2f 91       	pop	r18
+ 52a:	0f 90       	pop	r0
+ 52c:	0f be       	out	0x3f, r0	; 63
+ 52e:	0f 90       	pop	r0
+ 530:	1f 90       	pop	r1
+ 532:	18 95       	reti
+
+00000534 <__vector_8>:
+
+ISR(TIMER1_OVF_vect)
+{
+ 534:	1f 92       	push	r1
+ 536:	0f 92       	push	r0
+ 538:	0f b6       	in	r0, 0x3f	; 63
+ 53a:	0f 92       	push	r0
+ 53c:	11 24       	eor	r1, r1
+ 53e:	2f 93       	push	r18
+ 540:	3f 93       	push	r19
+ 542:	4f 93       	push	r20
+ 544:	5f 93       	push	r21
+ 546:	6f 93       	push	r22
+ 548:	7f 93       	push	r23
+ 54a:	8f 93       	push	r24
+ 54c:	9f 93       	push	r25
+ 54e:	af 93       	push	r26
+ 550:	bf 93       	push	r27
+ 552:	ef 93       	push	r30
+ 554:	ff 93       	push	r31
+	/*check if function is passed to the pointer*/
+	if(g_callBackPtr[1] != NULL_PTR)
+ 556:	e0 91 6e 00 	lds	r30, 0x006E	; 0x80006e <g_callBackPtr+0x2>
+ 55a:	f0 91 6f 00 	lds	r31, 0x006F	; 0x80006f <g_callBackPtr+0x3>
+ 55e:	30 97       	sbiw	r30, 0x00	; 0
+ 560:	11 f0       	breq	.+4      	; 0x566 <__vector_8+0x32>
+	{
+		/* Call the Call Back function in the application */
+		(*g_callBackPtr[1])();
+ 562:	09 95       	icall
+ 564:	07 c0       	rjmp	.+14     	; 0x574 <__vector_8+0x40>
+		/* another method to call the function using pointer to function g_callBackPtr(); */
+	}
+	/*check if function is passed to the pointer*/
+	else if(g_callBackPtr[2] != NULL_PTR)
+ 566:	e0 91 70 00 	lds	r30, 0x0070	; 0x800070 <g_callBackPtr+0x4>
+ 56a:	f0 91 71 00 	lds	r31, 0x0071	; 0x800071 <g_callBackPtr+0x5>
+ 56e:	30 97       	sbiw	r30, 0x00	; 0
+ 570:	09 f0       	breq	.+2      	; 0x574 <__vector_8+0x40>
+	{
+		/* Call the Call Back function in the application */
+		(*g_callBackPtr[2])();
+ 572:	09 95       	icall
+		/* another method to call the function using pointer to function g_callBackPtr(); */
+	}
+}
+ 574:	ff 91       	pop	r31
+ 576:	ef 91       	pop	r30
+ 578:	bf 91       	pop	r27
+ 57a:	af 91       	pop	r26
+ 57c:	9f 91       	pop	r25
+ 57e:	8f 91       	pop	r24
+ 580:	7f 91       	pop	r23
+ 582:	6f 91       	pop	r22
+ 584:	5f 91       	pop	r21
+ 586:	4f 91       	pop	r20
+ 588:	3f 91       	pop	r19
+ 58a:	2f 91       	pop	r18
+ 58c:	0f 90       	pop	r0
+ 58e:	0f be       	out	0x3f, r0	; 63
+ 590:	0f 90       	pop	r0
+ 592:	1f 90       	pop	r1
+ 594:	18 95       	reti
+
+00000596 <__vector_6>:
+
+ISR(TIMER1_COMPA_vect)
+{
+ 596:	1f 92       	push	r1
+ 598:	0f 92       	push	r0
+ 59a:	0f b6       	in	r0, 0x3f	; 63
+ 59c:	0f 92       	push	r0
+ 59e:	11 24       	eor	r1, r1
+ 5a0:	2f 93       	push	r18
+ 5a2:	3f 93       	push	r19
+ 5a4:	4f 93       	push	r20
+ 5a6:	5f 93       	push	r21
+ 5a8:	6f 93       	push	r22
+ 5aa:	7f 93       	push	r23
+ 5ac:	8f 93       	push	r24
+ 5ae:	9f 93       	push	r25
+ 5b0:	af 93       	push	r26
+ 5b2:	bf 93       	push	r27
+ 5b4:	ef 93       	push	r30
+ 5b6:	ff 93       	push	r31
+	/*check if function is passed to the pointer*/
+	if(g_callBackPtr[1] != NULL_PTR)
+ 5b8:	e0 91 6e 00 	lds	r30, 0x006E	; 0x80006e <g_callBackPtr+0x2>
+ 5bc:	f0 91 6f 00 	lds	r31, 0x006F	; 0x80006f <g_callBackPtr+0x3>
+ 5c0:	30 97       	sbiw	r30, 0x00	; 0
+ 5c2:	09 f0       	breq	.+2      	; 0x5c6 <__vector_6+0x30>
+	{
+		/* Call the Call Back function in the application */
+		(*g_callBackPtr[1])();
+ 5c4:	09 95       	icall
+		/* another method to call the function using pointer to function g_callBackPtr(); */
+	}
+}
+ 5c6:	ff 91       	pop	r31
+ 5c8:	ef 91       	pop	r30
+ 5ca:	bf 91       	pop	r27
+ 5cc:	af 91       	pop	r26
+ 5ce:	9f 91       	pop	r25
+ 5d0:	8f 91       	pop	r24
+ 5d2:	7f 91       	pop	r23
+ 5d4:	6f 91       	pop	r22
+ 5d6:	5f 91       	pop	r21
+ 5d8:	4f 91       	pop	r20
+ 5da:	3f 91       	pop	r19
+ 5dc:	2f 91       	pop	r18
+ 5de:	0f 90       	pop	r0
+ 5e0:	0f be       	out	0x3f, r0	; 63
+ 5e2:	0f 90       	pop	r0
+ 5e4:	1f 90       	pop	r1
+ 5e6:	18 95       	reti
+
+000005e8 <__vector_7>:
+
+ISR(TIMER1_COMPB_vect)
+{
+ 5e8:	1f 92       	push	r1
+ 5ea:	0f 92       	push	r0
+ 5ec:	0f b6       	in	r0, 0x3f	; 63
+ 5ee:	0f 92       	push	r0
+ 5f0:	11 24       	eor	r1, r1
+ 5f2:	2f 93       	push	r18
+ 5f4:	3f 93       	push	r19
+ 5f6:	4f 93       	push	r20
+ 5f8:	5f 93       	push	r21
+ 5fa:	6f 93       	push	r22
+ 5fc:	7f 93       	push	r23
+ 5fe:	8f 93       	push	r24
+ 600:	9f 93       	push	r25
+ 602:	af 93       	push	r26
+ 604:	bf 93       	push	r27
+ 606:	ef 93       	push	r30
+ 608:	ff 93       	push	r31
+	/*check if function is passed to the pointer*/
+	if(g_callBackPtr[2] != NULL_PTR)
+ 60a:	e0 91 70 00 	lds	r30, 0x0070	; 0x800070 <g_callBackPtr+0x4>
+ 60e:	f0 91 71 00 	lds	r31, 0x0071	; 0x800071 <g_callBackPtr+0x5>
+ 612:	30 97       	sbiw	r30, 0x00	; 0
+ 614:	09 f0       	breq	.+2      	; 0x618 <__vector_7+0x30>
+	{
+		/* Call the Call Back function in the application */
+		(*g_callBackPtr[2])();
+ 616:	09 95       	icall
+		/* another method to call the function using pointer to function g_callBackPtr(); */
+	}
+}
+ 618:	ff 91       	pop	r31
+ 61a:	ef 91       	pop	r30
+ 61c:	bf 91       	pop	r27
+ 61e:	af 91       	pop	r26
+ 620:	9f 91       	pop	r25
+ 622:	8f 91       	pop	r24
+ 624:	7f 91       	pop	r23
+ 626:	6f 91       	pop	r22
+ 628:	5f 91       	pop	r21
+ 62a:	4f 91       	pop	r20
+ 62c:	3f 91       	pop	r19
+ 62e:	2f 91       	pop	r18
+ 630:	0f 90       	pop	r0
+ 632:	0f be       	out	0x3f, r0	; 63
+ 634:	0f 90       	pop	r0
+ 636:	1f 90       	pop	r1
+ 638:	18 95       	reti
+
+0000063a <__vector_4>:
+
+ISR(TIMER2_OVF_vect)
+{
+ 63a:	1f 92       	push	r1
+ 63c:	0f 92       	push	r0
+ 63e:	0f b6       	in	r0, 0x3f	; 63
+ 640:	0f 92       	push	r0
+ 642:	11 24       	eor	r1, r1
+ 644:	2f 93       	push	r18
+ 646:	3f 93       	push	r19
+ 648:	4f 93       	push	r20
+ 64a:	5f 93       	push	r21
+ 64c:	6f 93       	push	r22
+ 64e:	7f 93       	push	r23
+ 650:	8f 93       	push	r24
+ 652:	9f 93       	push	r25
+ 654:	af 93       	push	r26
+ 656:	bf 93       	push	r27
+ 658:	ef 93       	push	r30
+ 65a:	ff 93       	push	r31
+	/*check if function is passed to the pointer*/
+	if(g_callBackPtr[3] != NULL_PTR)
+ 65c:	e0 91 72 00 	lds	r30, 0x0072	; 0x800072 <g_callBackPtr+0x6>
+ 660:	f0 91 73 00 	lds	r31, 0x0073	; 0x800073 <g_callBackPtr+0x7>
+ 664:	30 97       	sbiw	r30, 0x00	; 0
+ 666:	09 f0       	breq	.+2      	; 0x66a <__vector_4+0x30>
+	{
+		/* Call the Call Back function in the application */
+		(*g_callBackPtr[3])();
+ 668:	09 95       	icall
+		/* another method to call the function using pointer to function g_callBackPtr(); */
+	}
+}
+ 66a:	ff 91       	pop	r31
+ 66c:	ef 91       	pop	r30
+ 66e:	bf 91       	pop	r27
+ 670:	af 91       	pop	r26
+ 672:	9f 91       	pop	r25
+ 674:	8f 91       	pop	r24
+ 676:	7f 91       	pop	r23
+ 678:	6f 91       	pop	r22
+ 67a:	5f 91       	pop	r21
+ 67c:	4f 91       	pop	r20
+ 67e:	3f 91       	pop	r19
+ 680:	2f 91       	pop	r18
+ 682:	0f 90       	pop	r0
+ 684:	0f be       	out	0x3f, r0	; 63
+ 686:	0f 90       	pop	r0
+ 688:	1f 90       	pop	r1
+ 68a:	18 95       	reti
+
+0000068c <__vector_3>:
+
+ISR(TIMER2_COMP_vect)
+{
+ 68c:	1f 92       	push	r1
+ 68e:	0f 92       	push	r0
+ 690:	0f b6       	in	r0, 0x3f	; 63
+ 692:	0f 92       	push	r0
+ 694:	11 24       	eor	r1, r1
+ 696:	2f 93       	push	r18
+ 698:	3f 93       	push	r19
+ 69a:	4f 93       	push	r20
+ 69c:	5f 93       	push	r21
+ 69e:	6f 93       	push	r22
+ 6a0:	7f 93       	push	r23
+ 6a2:	8f 93       	push	r24
+ 6a4:	9f 93       	push	r25
+ 6a6:	af 93       	push	r26
+ 6a8:	bf 93       	push	r27
+ 6aa:	ef 93       	push	r30
+ 6ac:	ff 93       	push	r31
+	/*check if function is passed to the pointer*/
+	if(g_callBackPtr[3] != NULL_PTR)
+ 6ae:	e0 91 72 00 	lds	r30, 0x0072	; 0x800072 <g_callBackPtr+0x6>
+ 6b2:	f0 91 73 00 	lds	r31, 0x0073	; 0x800073 <g_callBackPtr+0x7>
+ 6b6:	30 97       	sbiw	r30, 0x00	; 0
+ 6b8:	09 f0       	breq	.+2      	; 0x6bc <__vector_3+0x30>
+	{
+		/* Call the Call Back function in the application */
+		(*g_callBackPtr[3])();
+ 6ba:	09 95       	icall
+		/* another method to call the function using pointer to function g_callBackPtr(); */
+	}
+}
+ 6bc:	ff 91       	pop	r31
+ 6be:	ef 91       	pop	r30
+ 6c0:	bf 91       	pop	r27
+ 6c2:	af 91       	pop	r26
+ 6c4:	9f 91       	pop	r25
+ 6c6:	8f 91       	pop	r24
+ 6c8:	7f 91       	pop	r23
+ 6ca:	6f 91       	pop	r22
+ 6cc:	5f 91       	pop	r21
+ 6ce:	4f 91       	pop	r20
+ 6d0:	3f 91       	pop	r19
+ 6d2:	2f 91       	pop	r18
+ 6d4:	0f 90       	pop	r0
+ 6d6:	0f be       	out	0x3f, r0	; 63
+ 6d8:	0f 90       	pop	r0
+ 6da:	1f 90       	pop	r1
+ 6dc:	18 95       	reti
+
+000006de <Timer_init>:
+ * 	2. Set the required Timer.
+ * 	3. Enable the Timer Interrupt.
+ * 	4. Initialize Timer Registers.
+ */
+void Timer_init(const Timer_ConfigType * Config_Ptr)
+{
+ 6de:	fc 01       	movw	r30, r24
+	switch(Config_Ptr->timer){
+ 6e0:	80 81       	ld	r24, Z
+ 6e2:	81 30       	cpi	r24, 0x01	; 1
+ 6e4:	09 f4       	brne	.+2      	; 0x6e8 <Timer_init+0xa>
+ 6e6:	4a c0       	rjmp	.+148    	; 0x77c <Timer_init+0x9e>
+ 6e8:	38 f0       	brcs	.+14     	; 0x6f8 <Timer_init+0x1a>
+ 6ea:	82 30       	cpi	r24, 0x02	; 2
+ 6ec:	09 f4       	brne	.+2      	; 0x6f0 <Timer_init+0x12>
+ 6ee:	8b c0       	rjmp	.+278    	; 0x806 <Timer_init+0x128>
+ 6f0:	83 30       	cpi	r24, 0x03	; 3
+ 6f2:	09 f4       	brne	.+2      	; 0x6f6 <Timer_init+0x18>
+ 6f4:	ce c0       	rjmp	.+412    	; 0x892 <Timer_init+0x1b4>
+ 6f6:	08 95       	ret
+		case TIMER0:
+			TCNT0 = 0; //timer initial value
+ 6f8:	12 be       	out	0x32, r1	; 50
+			OCR0  = Config_Ptr->compare_duty; //compare value/pwm duty value
+ 6fa:	85 81       	ldd	r24, Z+5	; 0x05
+ 6fc:	8c bf       	out	0x3c, r24	; 60
+			/* Check if mode is PWM or fast PWM */
+			if (Config_Ptr->mode==PWM || Config_Ptr->mode==FAST_PWM){
+ 6fe:	81 81       	ldd	r24, Z+1	; 0x01
+ 700:	8d 7f       	andi	r24, 0xFD	; 253
+ 702:	81 30       	cpi	r24, 0x01	; 1
+ 704:	29 f4       	brne	.+10     	; 0x710 <Timer_init+0x32>
+				/* Set OC0 pin (PB3) as output pin */
+				DDRB  = DDRB | (1<<PB3);
+ 706:	bb 9a       	sbi	0x17, 3	; 23
+				/* Clear Force Output Compare bit */
+				CLEAR_BIT(TCCR0,FOC0);
+ 708:	83 b7       	in	r24, 0x33	; 51
+ 70a:	8f 77       	andi	r24, 0x7F	; 127
+ 70c:	83 bf       	out	0x33, r24	; 51
+ 70e:	03 c0       	rjmp	.+6      	; 0x716 <Timer_init+0x38>
+			}else{
+				/* Set Force Output Compare bit */
+				SET_BIT(TCCR0,FOC0);
+ 710:	83 b7       	in	r24, 0x33	; 51
+ 712:	80 68       	ori	r24, 0x80	; 128
+ 714:	83 bf       	out	0x33, r24	; 51
+			}
+			/* If mode is normal and interrupt on
+			 * enable overflow interrupt
+			 * else enable compare interrupt when CTC is selected and interrupt is on*/
+			if(Config_Ptr->mode==NORMAL && Config_Ptr->interrupt==ON){
+ 716:	81 81       	ldd	r24, Z+1	; 0x01
+ 718:	81 11       	cpse	r24, r1
+ 71a:	07 c0       	rjmp	.+14     	; 0x72a <Timer_init+0x4c>
+ 71c:	84 81       	ldd	r24, Z+4	; 0x04
+ 71e:	81 30       	cpi	r24, 0x01	; 1
+ 720:	61 f4       	brne	.+24     	; 0x73a <Timer_init+0x5c>
+				SET_BIT(TIMSK,TOIE0); //enable Overflow interrupt
+ 722:	89 b7       	in	r24, 0x39	; 57
+ 724:	81 60       	ori	r24, 0x01	; 1
+ 726:	89 bf       	out	0x39, r24	; 57
+ 728:	08 c0       	rjmp	.+16     	; 0x73a <Timer_init+0x5c>
+			}else if(Config_Ptr->mode==CTC && Config_Ptr->interrupt==ON){
+ 72a:	82 30       	cpi	r24, 0x02	; 2
+ 72c:	31 f4       	brne	.+12     	; 0x73a <Timer_init+0x5c>
+ 72e:	84 81       	ldd	r24, Z+4	; 0x04
+ 730:	81 30       	cpi	r24, 0x01	; 1
+ 732:	19 f4       	brne	.+6      	; 0x73a <Timer_init+0x5c>
+				SET_BIT(TIMSK,OCIE0); //enable compare interrupt
+ 734:	89 b7       	in	r24, 0x39	; 57
+ 736:	82 60       	ori	r24, 0x02	; 2
+ 738:	89 bf       	out	0x39, r24	; 57
+			}
+			/* Configure  TCCR register according to configuration structure values */
+			TCCR0 = (TCCR0 & 0x80) \
+ 73a:	93 b7       	in	r25, 0x33	; 51
+					| (Config_Ptr->clock & 0x07) \
+					| ((Config_Ptr->com_mode & 0x03)<<4)\
+					| ((Config_Ptr->mode & 0x01)<<6)\
+ 73c:	21 81       	ldd	r18, Z+1	; 0x01
+				SET_BIT(TIMSK,TOIE0); //enable Overflow interrupt
+			}else if(Config_Ptr->mode==CTC && Config_Ptr->interrupt==ON){
+				SET_BIT(TIMSK,OCIE0); //enable compare interrupt
+			}
+			/* Configure  TCCR register according to configuration structure values */
+			TCCR0 = (TCCR0 & 0x80) \
+ 73e:	33 81       	ldd	r19, Z+3	; 0x03
+ 740:	37 70       	andi	r19, 0x07	; 7
+ 742:	89 2f       	mov	r24, r25
+ 744:	80 78       	andi	r24, 0x80	; 128
+ 746:	38 2b       	or	r19, r24
+ 748:	92 81       	ldd	r25, Z+2	; 0x02
+ 74a:	93 70       	andi	r25, 0x03	; 3
+ 74c:	40 e1       	ldi	r20, 0x10	; 16
+ 74e:	94 9f       	mul	r25, r20
+ 750:	c0 01       	movw	r24, r0
+ 752:	11 24       	eor	r1, r1
+ 754:	83 2b       	or	r24, r19
+ 756:	42 2f       	mov	r20, r18
+ 758:	41 70       	andi	r20, 0x01	; 1
+ 75a:	50 e0       	ldi	r21, 0x00	; 0
+ 75c:	00 24       	eor	r0, r0
+ 75e:	56 95       	lsr	r21
+ 760:	47 95       	ror	r20
+ 762:	07 94       	ror	r0
+ 764:	56 95       	lsr	r21
+ 766:	47 95       	ror	r20
+ 768:	07 94       	ror	r0
+ 76a:	54 2f       	mov	r21, r20
+ 76c:	40 2d       	mov	r20, r0
+ 76e:	48 2b       	or	r20, r24
+ 770:	22 70       	andi	r18, 0x02	; 2
+ 772:	22 0f       	add	r18, r18
+ 774:	22 0f       	add	r18, r18
+ 776:	42 2b       	or	r20, r18
+ 778:	43 bf       	out	0x33, r20	; 51
+					| (Config_Ptr->clock & 0x07) \
+					| ((Config_Ptr->com_mode & 0x03)<<4)\
+					| ((Config_Ptr->mode & 0x01)<<6)\
+					| ((Config_Ptr->mode & 0x02)<<2);
+			break;
+ 77a:	08 95       	ret
+		case TIMER1A:
+			TCNT1 = 0; //timer initial value
+ 77c:	1d bc       	out	0x2d, r1	; 45
+ 77e:	1c bc       	out	0x2c, r1	; 44
+			OCR1A  = Config_Ptr->compare_duty; //compare value
+ 780:	85 81       	ldd	r24, Z+5	; 0x05
+ 782:	96 81       	ldd	r25, Z+6	; 0x06
+ 784:	9b bd       	out	0x2b, r25	; 43
+ 786:	8a bd       	out	0x2a, r24	; 42
+			/* Check if mode is PWM or fast PWM */
+			if (Config_Ptr->t1_mode==PWM_PC_8 || Config_Ptr->t1_mode==PWM_PC_9 || Config_Ptr->t1_mode==PWM_PC_10 ||\
+ 788:	97 81       	ldd	r25, Z+7	; 0x07
+ 78a:	89 2f       	mov	r24, r25
+ 78c:	8b 7f       	andi	r24, 0xFB	; 251
+ 78e:	81 50       	subi	r24, 0x01	; 1
+ 790:	83 30       	cpi	r24, 0x03	; 3
+ 792:	30 f0       	brcs	.+12     	; 0x7a0 <Timer_init+0xc2>
+				Config_Ptr->t1_mode==FAST_PWM_8 || Config_Ptr->t1_mode==FAST_PWM_9 || Config_Ptr->t1_mode==FAST_PWM_10 ||\
+ 794:	89 2f       	mov	r24, r25
+ 796:	8d 7f       	andi	r24, 0xFD	; 253
+ 798:	89 30       	cpi	r24, 0x09	; 9
+ 79a:	11 f0       	breq	.+4      	; 0x7a0 <Timer_init+0xc2>
+				Config_Ptr->t1_mode==PWM_PFC_16 || Config_Ptr->t1_mode==PWM_PC_16 || Config_Ptr->t1_mode==FAST_PWM_16){
+ 79c:	9f 30       	cpi	r25, 0x0F	; 15
+ 79e:	29 f4       	brne	.+10     	; 0x7aa <Timer_init+0xcc>
+				/* Set OC1A pin (PD5) as output pin */
+				SET_BIT(DDRD,PD5);
+ 7a0:	8d 9a       	sbi	0x11, 5	; 17
+				/* Clear Force Output Compare bit */
+				CLEAR_BIT(TCCR1A,FOC1A);
+ 7a2:	8f b5       	in	r24, 0x2f	; 47
+ 7a4:	87 7f       	andi	r24, 0xF7	; 247
+ 7a6:	8f bd       	out	0x2f, r24	; 47
+ 7a8:	03 c0       	rjmp	.+6      	; 0x7b0 <Timer_init+0xd2>
+			}else{
+				/* Set Force Output Compare bit */
+				SET_BIT(TCCR1A,FOC1A);
+ 7aa:	8f b5       	in	r24, 0x2f	; 47
+ 7ac:	88 60       	ori	r24, 0x08	; 8
+ 7ae:	8f bd       	out	0x2f, r24	; 47
+			}
+			/* If mode is normal and interrupt on
+			 * enable overflow interrupt
+			 * else enable compare interrupt when CTC is selected and interrupt is on*/
+			if(Config_Ptr->t1_mode==NORMAL_16 && Config_Ptr->interrupt==ON){
+ 7b0:	87 81       	ldd	r24, Z+7	; 0x07
+ 7b2:	81 11       	cpse	r24, r1
+ 7b4:	07 c0       	rjmp	.+14     	; 0x7c4 <Timer_init+0xe6>
+ 7b6:	84 81       	ldd	r24, Z+4	; 0x04
+ 7b8:	81 30       	cpi	r24, 0x01	; 1
+ 7ba:	61 f4       	brne	.+24     	; 0x7d4 <Timer_init+0xf6>
+				SET_BIT(TIMSK,TOIE1); //enable Overflow interrupt
+ 7bc:	89 b7       	in	r24, 0x39	; 57
+ 7be:	84 60       	ori	r24, 0x04	; 4
+ 7c0:	89 bf       	out	0x39, r24	; 57
+ 7c2:	08 c0       	rjmp	.+16     	; 0x7d4 <Timer_init+0xf6>
+			}else if(Config_Ptr->t1_mode==CTC_16 && Config_Ptr->interrupt==ON){
+ 7c4:	84 30       	cpi	r24, 0x04	; 4
+ 7c6:	31 f4       	brne	.+12     	; 0x7d4 <Timer_init+0xf6>
+ 7c8:	84 81       	ldd	r24, Z+4	; 0x04
+ 7ca:	81 30       	cpi	r24, 0x01	; 1
+ 7cc:	19 f4       	brne	.+6      	; 0x7d4 <Timer_init+0xf6>
+				SET_BIT(TIMSK,OCIE1A); //enable compare interrupt
+ 7ce:	89 b7       	in	r24, 0x39	; 57
+ 7d0:	80 61       	ori	r24, 0x10	; 16
+ 7d2:	89 bf       	out	0x39, r24	; 57
+			}
+			/* Configure  TCCR registers according to configuration structure values */
+			TCCR1A = (TCCR1A & 0x3C) \
+ 7d4:	9f b5       	in	r25, 0x2f	; 47
+ 7d6:	27 81       	ldd	r18, Z+7	; 0x07
+ 7d8:	23 70       	andi	r18, 0x03	; 3
+ 7da:	89 2f       	mov	r24, r25
+ 7dc:	8c 73       	andi	r24, 0x3C	; 60
+ 7de:	28 2b       	or	r18, r24
+ 7e0:	92 81       	ldd	r25, Z+2	; 0x02
+ 7e2:	30 e4       	ldi	r19, 0x40	; 64
+ 7e4:	93 9f       	mul	r25, r19
+ 7e6:	c0 01       	movw	r24, r0
+ 7e8:	11 24       	eor	r1, r1
+ 7ea:	82 2b       	or	r24, r18
+ 7ec:	8f bd       	out	0x2f, r24	; 47
+					| ((Config_Ptr->com_mode & 0x03)<<6)\
+					| (Config_Ptr->t1_mode & 0x03);
+			TCCR1B = (TCCR1B & 0xE0) \
+ 7ee:	2e b5       	in	r18, 0x2e	; 46
+ 7f0:	93 81       	ldd	r25, Z+3	; 0x03
+ 7f2:	97 70       	andi	r25, 0x07	; 7
+ 7f4:	82 2f       	mov	r24, r18
+ 7f6:	80 7e       	andi	r24, 0xE0	; 224
+ 7f8:	98 2b       	or	r25, r24
+ 7fa:	87 81       	ldd	r24, Z+7	; 0x07
+ 7fc:	8c 70       	andi	r24, 0x0C	; 12
+ 7fe:	88 0f       	add	r24, r24
+ 800:	89 2b       	or	r24, r25
+ 802:	8e bd       	out	0x2e, r24	; 46
+					| (Config_Ptr->clock & 0x07) \
+					| ((Config_Ptr->t1_mode & 0x0C)<<1);
+			break;
+ 804:	08 95       	ret
+		case TIMER1B:
+			TCNT1 = 0; //timer initial value
+ 806:	1d bc       	out	0x2d, r1	; 45
+ 808:	1c bc       	out	0x2c, r1	; 44
+			OCR1B  = Config_Ptr->compare_duty; //compare value
+ 80a:	85 81       	ldd	r24, Z+5	; 0x05
+ 80c:	96 81       	ldd	r25, Z+6	; 0x06
+ 80e:	99 bd       	out	0x29, r25	; 41
+ 810:	88 bd       	out	0x28, r24	; 40
+			/* Check if mode is PWM or fast PWM */
+			if (Config_Ptr->t1_mode==PWM_PC_8 || Config_Ptr->t1_mode==PWM_PC_9 || Config_Ptr->t1_mode==PWM_PC_10 ||\
+ 812:	97 81       	ldd	r25, Z+7	; 0x07
+ 814:	89 2f       	mov	r24, r25
+ 816:	8b 7f       	andi	r24, 0xFB	; 251
+ 818:	81 50       	subi	r24, 0x01	; 1
+ 81a:	83 30       	cpi	r24, 0x03	; 3
+ 81c:	30 f0       	brcs	.+12     	; 0x82a <Timer_init+0x14c>
+				Config_Ptr->t1_mode==FAST_PWM_8 || Config_Ptr->t1_mode==FAST_PWM_9 || Config_Ptr->t1_mode==FAST_PWM_10 ||\
+ 81e:	89 2f       	mov	r24, r25
+ 820:	8d 7f       	andi	r24, 0xFD	; 253
+ 822:	89 30       	cpi	r24, 0x09	; 9
+ 824:	11 f0       	breq	.+4      	; 0x82a <Timer_init+0x14c>
+				Config_Ptr->t1_mode==PWM_PFC_16 || Config_Ptr->t1_mode==PWM_PC_16 || Config_Ptr->t1_mode==FAST_PWM_16){
+ 826:	9f 30       	cpi	r25, 0x0F	; 15
+ 828:	29 f4       	brne	.+10     	; 0x834 <Timer_init+0x156>
+				/* Set OC1A pin (PD4) as output pin */
+				SET_BIT(DDRD,PD4);
+ 82a:	8c 9a       	sbi	0x11, 4	; 17
+				/* Clear Force Output Compare bit */
+				CLEAR_BIT(TCCR1A,FOC1B);
+ 82c:	8f b5       	in	r24, 0x2f	; 47
+ 82e:	8b 7f       	andi	r24, 0xFB	; 251
+ 830:	8f bd       	out	0x2f, r24	; 47
+ 832:	03 c0       	rjmp	.+6      	; 0x83a <Timer_init+0x15c>
+			}else{
+				/* Set Force Output Compare bit */
+				SET_BIT(TCCR1A,FOC1B);
+ 834:	8f b5       	in	r24, 0x2f	; 47
+ 836:	84 60       	ori	r24, 0x04	; 4
+ 838:	8f bd       	out	0x2f, r24	; 47
+			}
+			/* If mode is normal and interrupt on
+			 * enable overflow interrupt
+			 * else enable compare interrupt when CTC is selected and interrupt is on*/
+			if(Config_Ptr->t1_mode==NORMAL_16 && Config_Ptr->interrupt==ON){
+ 83a:	87 81       	ldd	r24, Z+7	; 0x07
+ 83c:	81 11       	cpse	r24, r1
+ 83e:	07 c0       	rjmp	.+14     	; 0x84e <Timer_init+0x170>
+ 840:	84 81       	ldd	r24, Z+4	; 0x04
+ 842:	81 30       	cpi	r24, 0x01	; 1
+ 844:	61 f4       	brne	.+24     	; 0x85e <Timer_init+0x180>
+				SET_BIT(TIMSK,TOIE1); //enable Overflow interrupt
+ 846:	89 b7       	in	r24, 0x39	; 57
+ 848:	84 60       	ori	r24, 0x04	; 4
+ 84a:	89 bf       	out	0x39, r24	; 57
+ 84c:	08 c0       	rjmp	.+16     	; 0x85e <Timer_init+0x180>
+			}else if(Config_Ptr->t1_mode==CTC_16 && Config_Ptr->interrupt==ON){
+ 84e:	84 30       	cpi	r24, 0x04	; 4
+ 850:	31 f4       	brne	.+12     	; 0x85e <Timer_init+0x180>
+ 852:	84 81       	ldd	r24, Z+4	; 0x04
+ 854:	81 30       	cpi	r24, 0x01	; 1
+ 856:	19 f4       	brne	.+6      	; 0x85e <Timer_init+0x180>
+				SET_BIT(TIMSK,OCIE1B); //enable compare interrupt
+ 858:	89 b7       	in	r24, 0x39	; 57
+ 85a:	88 60       	ori	r24, 0x08	; 8
+ 85c:	89 bf       	out	0x39, r24	; 57
+			}
+			/* Configure  TCCR registers according to configuration structure values */
+			TCCR1A = (TCCR1A & 0xCC) \
+ 85e:	9f b5       	in	r25, 0x2f	; 47
+ 860:	27 81       	ldd	r18, Z+7	; 0x07
+ 862:	23 70       	andi	r18, 0x03	; 3
+ 864:	89 2f       	mov	r24, r25
+ 866:	8c 7c       	andi	r24, 0xCC	; 204
+ 868:	28 2b       	or	r18, r24
+ 86a:	92 81       	ldd	r25, Z+2	; 0x02
+ 86c:	93 70       	andi	r25, 0x03	; 3
+ 86e:	40 e1       	ldi	r20, 0x10	; 16
+ 870:	94 9f       	mul	r25, r20
+ 872:	c0 01       	movw	r24, r0
+ 874:	11 24       	eor	r1, r1
+ 876:	82 2b       	or	r24, r18
+ 878:	8f bd       	out	0x2f, r24	; 47
+					| ((Config_Ptr->com_mode & 0x03)<<4)\
+					| (Config_Ptr->t1_mode & 0x03);
+			TCCR1B = (TCCR1B & 0xE0) \
+ 87a:	2e b5       	in	r18, 0x2e	; 46
+ 87c:	93 81       	ldd	r25, Z+3	; 0x03
+ 87e:	97 70       	andi	r25, 0x07	; 7
+ 880:	82 2f       	mov	r24, r18
+ 882:	80 7e       	andi	r24, 0xE0	; 224
+ 884:	98 2b       	or	r25, r24
+ 886:	87 81       	ldd	r24, Z+7	; 0x07
+ 888:	8c 70       	andi	r24, 0x0C	; 12
+ 88a:	88 0f       	add	r24, r24
+ 88c:	89 2b       	or	r24, r25
+ 88e:	8e bd       	out	0x2e, r24	; 46
+				| (Config_Ptr->clock & 0x07) \
+				| ((Config_Ptr->t1_mode & 0x0C)<<1);
+			break;
+ 890:	08 95       	ret
+		case TIMER2:
+			TCNT2 = 0; //timer initial value
+ 892:	14 bc       	out	0x24, r1	; 36
+			OCR2  = Config_Ptr->compare_duty; //compare value/pwm duty value
+ 894:	85 81       	ldd	r24, Z+5	; 0x05
+ 896:	83 bd       	out	0x23, r24	; 35
+			/* Check if mode is PWM or fast PWM */
+			if (Config_Ptr->mode==PWM || Config_Ptr->mode==FAST_PWM){
+ 898:	81 81       	ldd	r24, Z+1	; 0x01
+ 89a:	8d 7f       	andi	r24, 0xFD	; 253
+ 89c:	81 30       	cpi	r24, 0x01	; 1
+ 89e:	29 f4       	brne	.+10     	; 0x8aa <Timer_init+0x1cc>
+				/* Set OC1B pin (PD4) as output pin */
+				SET_BIT(DDRD,PD7);
+ 8a0:	8f 9a       	sbi	0x11, 7	; 17
+				/* Clear Force Output Compare bit */
+				CLEAR_BIT(TCCR2,FOC2);
+ 8a2:	85 b5       	in	r24, 0x25	; 37
+ 8a4:	8f 77       	andi	r24, 0x7F	; 127
+ 8a6:	85 bd       	out	0x25, r24	; 37
+ 8a8:	03 c0       	rjmp	.+6      	; 0x8b0 <Timer_init+0x1d2>
+			}else{
+				/* Set Force Output Compare bit */
+				SET_BIT(TCCR2,FOC2);
+ 8aa:	85 b5       	in	r24, 0x25	; 37
+ 8ac:	80 68       	ori	r24, 0x80	; 128
+ 8ae:	85 bd       	out	0x25, r24	; 37
+			}
+			/* If mode is normal and interrupt on
+			 * enable overflow interrupt
+			 * else enable compare interrupt when CTC is selected and interrupt is on*/
+			if(Config_Ptr->mode==NORMAL && Config_Ptr->interrupt==ON){
+ 8b0:	81 81       	ldd	r24, Z+1	; 0x01
+ 8b2:	81 11       	cpse	r24, r1
+ 8b4:	07 c0       	rjmp	.+14     	; 0x8c4 <Timer_init+0x1e6>
+ 8b6:	84 81       	ldd	r24, Z+4	; 0x04
+ 8b8:	81 30       	cpi	r24, 0x01	; 1
+ 8ba:	61 f4       	brne	.+24     	; 0x8d4 <Timer_init+0x1f6>
+				SET_BIT(TIMSK,TOIE2); //enable Overflow interrupt
+ 8bc:	89 b7       	in	r24, 0x39	; 57
+ 8be:	80 64       	ori	r24, 0x40	; 64
+ 8c0:	89 bf       	out	0x39, r24	; 57
+ 8c2:	08 c0       	rjmp	.+16     	; 0x8d4 <Timer_init+0x1f6>
+			}else if(Config_Ptr->mode==CTC && Config_Ptr->interrupt==ON){
+ 8c4:	82 30       	cpi	r24, 0x02	; 2
+ 8c6:	31 f4       	brne	.+12     	; 0x8d4 <Timer_init+0x1f6>
+ 8c8:	84 81       	ldd	r24, Z+4	; 0x04
+ 8ca:	81 30       	cpi	r24, 0x01	; 1
+ 8cc:	19 f4       	brne	.+6      	; 0x8d4 <Timer_init+0x1f6>
+				SET_BIT(TIMSK,OCIE2); //enable compare interrupt
+ 8ce:	89 b7       	in	r24, 0x39	; 57
+ 8d0:	80 68       	ori	r24, 0x80	; 128
+ 8d2:	89 bf       	out	0x39, r24	; 57
+			}
+			/* Configure  TCCR register according to configuration structure values */
+			TCCR2 = (TCCR2 & 0x80) \
+ 8d4:	95 b5       	in	r25, 0x25	; 37
+					| (Config_Ptr->t2_clock & 0x07) \
+					| ((Config_Ptr->com_mode & 0x03)<<4)\
+					| ((Config_Ptr->mode & 0x01)<<6)\
+ 8d6:	41 81       	ldd	r20, Z+1	; 0x01
+				SET_BIT(TIMSK,TOIE2); //enable Overflow interrupt
+			}else if(Config_Ptr->mode==CTC && Config_Ptr->interrupt==ON){
+				SET_BIT(TIMSK,OCIE2); //enable compare interrupt
+			}
+			/* Configure  TCCR register according to configuration structure values */
+			TCCR2 = (TCCR2 & 0x80) \
+ 8d8:	50 85       	ldd	r21, Z+8	; 0x08
+ 8da:	57 70       	andi	r21, 0x07	; 7
+ 8dc:	89 2f       	mov	r24, r25
+ 8de:	80 78       	andi	r24, 0x80	; 128
+ 8e0:	58 2b       	or	r21, r24
+ 8e2:	92 81       	ldd	r25, Z+2	; 0x02
+ 8e4:	93 70       	andi	r25, 0x03	; 3
+ 8e6:	20 e1       	ldi	r18, 0x10	; 16
+ 8e8:	92 9f       	mul	r25, r18
+ 8ea:	c0 01       	movw	r24, r0
+ 8ec:	11 24       	eor	r1, r1
+ 8ee:	85 2b       	or	r24, r21
+ 8f0:	24 2f       	mov	r18, r20
+ 8f2:	21 70       	andi	r18, 0x01	; 1
+ 8f4:	30 e0       	ldi	r19, 0x00	; 0
+ 8f6:	00 24       	eor	r0, r0
+ 8f8:	36 95       	lsr	r19
+ 8fa:	27 95       	ror	r18
+ 8fc:	07 94       	ror	r0
+ 8fe:	36 95       	lsr	r19
+ 900:	27 95       	ror	r18
+ 902:	07 94       	ror	r0
+ 904:	32 2f       	mov	r19, r18
+ 906:	20 2d       	mov	r18, r0
+ 908:	28 2b       	or	r18, r24
+ 90a:	42 70       	andi	r20, 0x02	; 2
+ 90c:	44 0f       	add	r20, r20
+ 90e:	44 0f       	add	r20, r20
+ 910:	24 2b       	or	r18, r20
+ 912:	25 bd       	out	0x25, r18	; 37
+ 914:	08 95       	ret
+
+00000916 <Timer_setCallBack>:
+ * Description: Function to set the Call Back function address.
+ */
+void Timer_setCallBack(Timer_Select timer, void(*a_ptr)(void))
+{
+	/* Save the address of the Call back function in a global variable */
+	g_callBackPtr[timer] = a_ptr;
+ 916:	e8 2f       	mov	r30, r24
+ 918:	f0 e0       	ldi	r31, 0x00	; 0
+ 91a:	ee 0f       	add	r30, r30
+ 91c:	ff 1f       	adc	r31, r31
+ 91e:	e4 59       	subi	r30, 0x94	; 148
+ 920:	ff 4f       	sbci	r31, 0xFF	; 255
+ 922:	71 83       	std	Z+1, r23	; 0x01
+ 924:	60 83       	st	Z, r22
+ 926:	08 95       	ret
+
+00000928 <_exit>:
+ 928:	f8 94       	cli
+
+0000092a <__stop_program>:
+ 92a:	ff cf       	rjmp	.-2      	; 0x92a <__stop_program>
